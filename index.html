@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#073f32">
+<meta name="description" content="VENDAI, la marketplace qui rapproche les commerçants et les clients.">
+<title>VENDAI | Le commerce sans frontières</title>
+<style>
+:root{--green:#073f32;--green2:#0b654e;--gold:#d9ad55;--cream:#f8f7f2;--ink:#17231e;--muted:#78817b;--line:#e9ece7}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+.topbar{background:var(--green);color:white;text-align:center;padding:10px;font-size:12px}
+header{background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+.nav{max-width:1160px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:42px;height:42px;border-radius:12px;background:var(--green);display:grid;place-items:center;color:var(--gold);font-size:24px;font-weight:900}
+.logo-name{font-size:24px;font-weight:900;letter-spacing:2px;color:var(--green)}
+.logo-sub{font-size:9px;letter-spacing:1.5px;color:var(--muted)}
+.links{display:flex;gap:24px;font-size:13px;font-weight:700}
+.links a:hover{color:var(--green2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;padding:13px 18px;font-weight:700;font-size:13px;cursor:pointer}
+.btn-dark{background:var(--green);color:white}
+.btn-dark:hover{background:var(--green2)}
+.btn-gold{background:var(--gold);color:var(--green)}
+.btn-light{background:white;color:var(--green);border:1px solid var(--line)}
+.hero{background:var(--green);color:white;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:430px;height:430px;border:1px solid #ffffff20;border-radius:50%;right:-130px;top:-180px}
+.hero-inner{max-width:1160px;margin:auto;padding:75px 22px;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center;position:relative;z-index:1}
+.eyebrow,.kicker{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--gold)}
+.hero h1{font-size:clamp(38px,5vw,62px);line-height:1.08;letter-spacing:-2px;margin:20px 0}
+.hero h1 span{color:var(--gold)}
+.hero p{font-size:15px;line-height:1.8;color:#d2e0d9;max-width:520px}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.hero-art{display:grid;place-items:center;min-height:280px}
+.art-card{width:min(100%,340px);padding:35px 25px;text-align:center;border:1px solid #ffffff40;border-radius:22px;background:#ffffff0c;transform:rotate(-3deg)}
+.art-symbol{font-size:100px;color:var(--gold);font-weight:900}
+.art-card h3{font-size:21px}
+.art-card p{font-size:12px}
+.search-wrap{max-width:850px;margin:-27px auto 0;padding:0 20px;position:relative;z-index:2}
+.search-box{display:flex;background:white;border-radius:12px;padding:8px;box-shadow:0 12px 35px #102d2015}
+.search-box input{flex:1;min-width:0;border:0;outline:0;padding:12px;font-size:14px}
+.search-box button{border:0;border-radius:8px;background:var(--gold);padding:0 20px;font-weight:800;color:var(--green);cursor:pointer}
+.section{max-width:1160px;margin:auto;padding:60px 22px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:25px}
+.section h2{font-size:29px;margin:9px 0 0}
+.section-head p{font-size:13px;color:var(--muted)}
+.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.category{background:white;border:1px solid var(--line);border-radius:13px;padding:20px 8px;text-align:center;cursor:pointer}
+.category:hover,.category.active{border-color:var(--green2);background:#f0f6f1}
+.cat-icon{width:52px;height:52px;border-radius:16px;background:#edf4ef;display:grid;place-items:center;font-size:25px;margin:0 auto 12px}
+.category strong{font-size:12px}
+.products-section{background:white}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
+.product{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:white}
+.product-visual{height:165px;display:grid;place-items:center;font-size:65px;position:relative}
+.v1{background:#f1e8da}.v2{background:#e8eee9}.v3{background:#eee8f1}.v4{background:#f4eadf}
+.v5{background:#e8eef3}.v6{background:#f1eddf}.v7{background:#e9eee8}.v8{background:#f2e8e6}
+.product-label{position:absolute;top:12px;left:12px;background:white;color:var(--green);font-size:9px;font-weight:800;padding:7px 9px;border-radius:5px}
+.product-info{padding:15px}
+.product-info small{color:var(--muted);font-size:11px}
+.product-info h3{font-size:14px;margin:8px 0}
+.product-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:13px;gap:5px}
+.price{font-size:13px;font-weight:900;color:var(--green)}
+.add-btn{border:1px solid var(--green);background:white;color:var(--green);border-radius:7px;padding:8px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.add-btn:hover{background:var(--green);color:white}
+.empty{grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)}
+.seller{background:#edf2ed;border-radius:18px;padding:40px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px}
+.seller h2{font-size:30px;margin:12px 0}
+.seller p{color:#64736a;font-size:14px;line-height:1.8;max-width:560px}
+.seller-mark{font-size:85px;color:var(--green)}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:25px}
+.benefit{padding:22px;border:1px solid var(--line);border-radius:12px;background:white}
+.benefit-icon{font-size:25px}
+.benefit h3{font-size:14px}
+.benefit p{font-size:12px;color:var(--muted);line-height:1.7}
+footer{background:#062f27;color:white;padding:40px 22px 20px}
+.footer-inner{max-width:1160px;margin:auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;padding-bottom:25px}
+footer .logo-name{color:white}
+footer p{color:#b9cbc2;font-size:12px;line-height:1.8;max-width:350px}
+footer h4{font-size:13px}
+.footer-links{display:grid;gap:12px;color:#b9cbc2;font-size:12px}
+.copyright{border-top:1px solid #ffffff25;padding-top:18px;color:#9fb6aa;font-size:11px;text-align:center}
+@media(max-width:800px){
+ .links{display:none}
+ .hero-inner{grid-template-columns:1fr;padding:55px 22px}
+ .hero-art{min-height:190px}
+ .art-card{max-width:280px;padding:15px}
+ .art-symbol{font-size:65px}
+ .categories{grid-template-columns:repeat(3,1fr)}
+ .products{grid-template-columns:repeat(2,1fr)}
+ .seller{padding:25px}
+}
+@media(max-width:480px){
+ .nav{padding:12px}
+ .logo-name{font-size:21px}
+ .nav-actions .btn-light{display:none}
+ .hero h1{font-size:40px}
+ .section{padding:45px 15px}
+ .section-head{align-items:start;flex-direction:column}
+ .section h2{font-size:25px}
+ .categories{gap:9px}
+ .category{padding:15px 5px}
+ .cat-icon{width:44px;height:44px;font-size:21px}
+ .products{gap:10px}
+ .product-visual{height:125px;font-size:48px}
+ .product-info{padding:11px}
+ .product-info h3{font-size:12px}
+ .price{font-size:11px}
+ .add-btn{font-size:10px;padding:7px}
+ .seller{grid-template-columns:1fr}
+ .seller-mark{display:none}
+ .benefits{grid-template-columns:1fr}
+ .footer-top{grid-template-columns:1fr 1fr}
+ .footer-top>div:first-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="topbar">Bienvenue sur VENDAI — Le commerce sans frontières</div>
+<header>
+<nav class="nav">
+<a href="#accueil" class="logo">
+<span class="logo-mark">V</span>
+<span><span class="logo-name">VENDAI</span><br><span class="logo-sub">LE COMMERCE SANS FRONTIÈRES</span></span>
+</a>
+<div class="links">
+<a href="#accueil">Accueil</a>
+<a href="#categories">Catégories</a>
+<a href="#produits">Produits</a>
+<a href="#vendeur">Devenir vendeur</a>
+</div>
+<div class="nav-actions">
+<a class="btn btn-light" href="#produits">Explorer</a>
+<a class="btn btn-dark" href="#vendeur">Vendre</a>
+</div>
+</nav>
+</header>
+<main>
+<section class="hero" id="accueil">
+<div class="hero-inner">
+<div>
+<div class="eyebrow">BIENVENUE SUR VENDAI</div>
+<h1>Le commerce prend une nouvelle <span>dimension.</span></h1>
+<p>Découvrez des produits, explorez des boutiques et rapprochez-vous des commerçants. Tout le commerce en un seul endroit.</p>
+<div class="hero-buttons">
+<a class="btn btn-gold" href="#produits">Découvrir les produits →</a>
+<a class="btn btn-light" href="#vendeur">Créer ma boutique</a>
+</div>
+</div>
+<div class="hero-art">
+<div class="art-card">
+<div class="art-symbol">V</div>
+<h3>Bienvenue chez VENDAI</h3>
+<p>Découvrez. Comparez. Achetez.</p>
+</div>
+</div>
+</div>
+</section>
+<div class="search-wrap">
+<div class="search-box">
+<input id="search" type="search" placeholder="Que recherchez-vous aujourd'hui ?">
+<button onclick="filterProducts()">Rechercher</button>
+</div>
+</div>
+<section class="section" id="categories">
+<div class="section-head">
+<div><div class="kicker">EXPLOREZ</div><h2>Nos catégories</h2></div>
+<p>Trouvez facilement ce que vous cherchez.</p>
+</div>
+<div class="categories">
+<div class="category" onclick="chooseCategory('Mode')"><div class="cat-icon">👕</div><strong>Mode</strong></div>
+<div class="category" onclick="chooseCategory('Téléphones')"><div class="cat-icon">📱</div><strong>Téléphones</strong></div>
+<div class="category" onclick="chooseCategory('Maison')"><div class="cat-icon">🏠</div><strong>Maison</strong></div>
+<div class="category" onclick="chooseCategory('Beauté')"><div class="cat-icon">✨</div><strong>Beauté</strong></div>
+<div class="category" onclick="chooseCategory('Accessoires')"><div class="cat-icon">⌚</div><strong>Accessoires</strong></div>
+<div class="category" onclick="chooseCategory('Autres')"><div class="cat-icon">🛍️</div><strong>Autres</strong></div>
+</div>
+</section>
+<section class="products-section" id="produits">
+<div class="section">
+<div class="section-head">
+<div><div class="kicker">SÉLECTION VENDAI</div><h2>Découvrez nos produits</h2></div>
+<p>Exemples de présentation</p>
+</div>
+<div class="products" id="product-list">
+<article class="product" data-category="Mode"><div class="product-visual v1"><span class="product-label">EXEMPLE</span>👟</div><div class="product-info"><small>Mode</small><h3>Chaussures tendance</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Téléphones"><div class="product-visual v2"><span class="product-label">EXEMPLE</span>📱</div><div class="product-info"><small>Téléphones</small><h3>Téléphone mobile</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Accessoires"><div class="product-visual v3"><span class="product-label">EXEMPLE</span>⌚</div><div class="product-info"><small>Accessoires</small><h3>Montre élégante</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Maison"><div class="product-visual v4"><span class="product-label">EXEMPLE</span>🪑</div><div class="product-info"><small>Maison</small><h3>Décoration maison</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Beauté"><div class="product-visual v5"><span class="product-label">EXEMPLE</span>🧴</div><div class="product-info"><small>Beauté</small><h3>Soins et beauté</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Mode"><div class="product-visual v6"><span class="product-label">EXEMPLE</span>👔</div><div class="product-info"><small>Mode</small><h3>Collection vêtements</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Autres"><div class="product-visual v7"><span class="product-label">EXEMPLE</span>🎧</div><div class="product-info"><small>Autres</small><h3>Équipement audio</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+<article class="product" data-category="Accessoires"><div class="product-visual v8"><span class="product-label">EXEMPLE</span>👜</div><div class="product-info"><small>Accessoires</small><h3>Sac du quotidien</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
+</div>
+</div>
+</section>
+<section class="section" id="vendeur">
+<div class="seller">
+<div>
+<div class="kicker">ESPACE COMMERÇANTS</div>
+<h2>Votre boutique mérite d'être vue.</h2>
+<p>Rejoignez VENDAI et préparez votre présence en ligne. Présentez vos produits et faites découvrir votre activité à de nouveaux clients.</p>
+<a href="mailto:" class="btn btn-dark">Devenir vendeur →</a>
+</div>
+<div class="seller-mark">✦</div>
+</div>
+<div class="benefits">
+<div class="benefit"><div class="benefit-icon">🏪</div><h3>Votre propre boutique</h3><p>Présentez votre commerce avec une identité qui vous ressemble.</p></div>
+<div class="benefit"><div class="benefit-icon">📦</div><h3>Vos produits en ligne</h3><p>Préparez un catalogue clair pour vos futurs clients.</p></div>
+<div class="benefit"><div class="benefit-icon">🤝</div><h3>Plus de visibilité</h3><p>Faites connaître votre activité sur une plateforme commune.</p></div>
+</div>
+</section>
+</main>
+<footer>
+<div class="footer-inner">
+<div class="footer-top">
+<div>
+<div class="logo"><span class="logo-mark">V</span><span><span class="logo-name">VENDAI</span><br><span class="logo-sub">LE COMMERCE SANS FRONTIÈRES</span></span></div>
+<p>Une marketplace qui rapproche les commerçants et les clients, en Côte d'Ivoire et au-delà.</p>
+</div>
+<div><h4>Découvrir</h4><div class="footer-links"><a href="#accueil">Accueil</a><a href="#categories">Catégories</a><a href="#produits">Produits</a></div></div>
+<div><h4>Commerçants</h4><div class="footer-links"><a href="#vendeur">Devenir vendeur</a><a href="#vendeur">En savoir plus</a></div></div>
+</div>
+<div class="copyright">© 2026 VENDAI. Tous droits réservés.</div>
+</div>
+</footer>
+<script>
+function filterProducts(){
+ const q=document.getElementById('search').value.toLowerCase().trim();
+ let count=0;
+ document.querySelectorAll('.product').forEach(function(p){
+  const match=p.innerText.toLowerCase().includes(q);
+  p.style.display=match?'':'none';
+  if(match)count++;
+ });
+ let empty=document.getElementById('empty-result');
+ if(!count){
+  if(!empty){
+   empty=document.createElement('div');
+   empty.id='empty-result';
+   empty.className='empty';
+   empty.textContent='Aucun produit trouvé. Essayez une autre recherche.';
+   document.getElementById('product-list').appendChild(empty);
+  }
+ }else if(empty){empty.remove();}
+}
+function chooseCategory(category){
+ document.getElementById('search').value=category;
+ filterProducts();
+ document.getElementById('produits').scrollIntoView({behavior:'smooth'});
+}
+document.getElementById('search').addEventListener('keydown',function(e){
+ if(e.key==='Enter')filterProducts();
+});
+</script>
+</body>
+</html>
