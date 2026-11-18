@@ -259,5 +259,20 @@ document.getElementById('search').addEventListener('keydown',function(e){
  if(e.key==='Enter')filterProducts();
 });
 </script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const VENDAI_SUPABASE_URL = 'https://djzwbcmhwujvbgagbxes.supabase.co';
+
+const VENDAI_SUPABASE_KEY = 'sb_publishable_xsPHSQEuHn8Zs1b08iujow_rCIUKIi_';
+
+const vendaiDB = window.supabase.createClient(
+  VENDAI_SUPABASE_URL,
+  VENDAI_SUPABASE_KEY
+);
+
+window.vendaiDB = vendaiDB;
+
+console.log('VENDAI : Supabase initialisé');
+</script>
 </body>
 </html>
