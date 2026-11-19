@@ -1,278 +1,121 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#073f32">
-<meta name="description" content="VENDAI, la marketplace qui rapproche les commerçants et les clients.">
 <title>VENDAI | Le commerce sans frontières</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--green:#073f32;--green2:#0b654e;--gold:#d9ad55;--cream:#f8f7f2;--ink:#17231e;--muted:#78817b;--line:#e9ece7}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-a{text-decoration:none;color:inherit}
-button,input{font:inherit}
-.topbar{background:var(--green);color:white;text-align:center;padding:10px;font-size:12px}
-header{background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
-.nav{max-width:1160px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-mark{width:42px;height:42px;border-radius:12px;background:var(--green);display:grid;place-items:center;color:var(--gold);font-size:24px;font-weight:900}
-.logo-name{font-size:24px;font-weight:900;letter-spacing:2px;color:var(--green)}
-.logo-sub{font-size:9px;letter-spacing:1.5px;color:var(--muted)}
-.links{display:flex;gap:24px;font-size:13px;font-weight:700}
-.links a:hover{color:var(--green2)}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:8px;padding:13px 18px;font-weight:700;font-size:13px;cursor:pointer}
-.btn-dark{background:var(--green);color:white}
-.btn-dark:hover{background:var(--green2)}
-.btn-gold{background:var(--gold);color:var(--green)}
-.btn-light{background:white;color:var(--green);border:1px solid var(--line)}
-.hero{background:var(--green);color:white;position:relative;overflow:hidden}
-.hero:after{content:"";position:absolute;width:430px;height:430px;border:1px solid #ffffff20;border-radius:50%;right:-130px;top:-180px}
-.hero-inner{max-width:1160px;margin:auto;padding:75px 22px;display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center;position:relative;z-index:1}
-.eyebrow,.kicker{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--gold)}
-.hero h1{font-size:clamp(38px,5vw,62px);line-height:1.08;letter-spacing:-2px;margin:20px 0}
-.hero h1 span{color:var(--gold)}
-.hero p{font-size:15px;line-height:1.8;color:#d2e0d9;max-width:520px}
-.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
-.hero-art{display:grid;place-items:center;min-height:280px}
-.art-card{width:min(100%,340px);padding:35px 25px;text-align:center;border:1px solid #ffffff40;border-radius:22px;background:#ffffff0c;transform:rotate(-3deg)}
-.art-symbol{font-size:100px;color:var(--gold);font-weight:900}
-.art-card h3{font-size:21px}
-.art-card p{font-size:12px}
-.search-wrap{max-width:850px;margin:-27px auto 0;padding:0 20px;position:relative;z-index:2}
-.search-box{display:flex;background:white;border-radius:12px;padding:8px;box-shadow:0 12px 35px #102d2015}
-.search-box input{flex:1;min-width:0;border:0;outline:0;padding:12px;font-size:14px}
-.search-box button{border:0;border-radius:8px;background:var(--gold);padding:0 20px;font-weight:800;color:var(--green);cursor:pointer}
-.section{max-width:1160px;margin:auto;padding:60px 22px}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:25px}
-.section h2{font-size:29px;margin:9px 0 0}
-.section-head p{font-size:13px;color:var(--muted)}
-.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
-.category{background:white;border:1px solid var(--line);border-radius:13px;padding:20px 8px;text-align:center;cursor:pointer}
-.category:hover,.category.active{border-color:var(--green2);background:#f0f6f1}
-.cat-icon{width:52px;height:52px;border-radius:16px;background:#edf4ef;display:grid;place-items:center;font-size:25px;margin:0 auto 12px}
-.category strong{font-size:12px}
-.products-section{background:white}
-.products{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
-.product{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:white}
-.product-visual{height:165px;display:grid;place-items:center;font-size:65px;position:relative}
-.v1{background:#f1e8da}.v2{background:#e8eee9}.v3{background:#eee8f1}.v4{background:#f4eadf}
-.v5{background:#e8eef3}.v6{background:#f1eddf}.v7{background:#e9eee8}.v8{background:#f2e8e6}
-.product-label{position:absolute;top:12px;left:12px;background:white;color:var(--green);font-size:9px;font-weight:800;padding:7px 9px;border-radius:5px}
-.product-info{padding:15px}
-.product-info small{color:var(--muted);font-size:11px}
-.product-info h3{font-size:14px;margin:8px 0}
-.product-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:13px;gap:5px}
-.price{font-size:13px;font-weight:900;color:var(--green)}
-.add-btn{border:1px solid var(--green);background:white;color:var(--green);border-radius:7px;padding:8px 10px;font-size:11px;font-weight:700;cursor:pointer}
-.add-btn:hover{background:var(--green);color:white}
-.empty{grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)}
-.seller{background:#edf2ed;border-radius:18px;padding:40px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px}
-.seller h2{font-size:30px;margin:12px 0}
-.seller p{color:#64736a;font-size:14px;line-height:1.8;max-width:560px}
-.seller-mark{font-size:85px;color:var(--green)}
-.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:25px}
-.benefit{padding:22px;border:1px solid var(--line);border-radius:12px;background:white}
-.benefit-icon{font-size:25px}
-.benefit h3{font-size:14px}
-.benefit p{font-size:12px;color:var(--muted);line-height:1.7}
-footer{background:#062f27;color:white;padding:40px 22px 20px}
-.footer-inner{max-width:1160px;margin:auto}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px;padding-bottom:25px}
-footer .logo-name{color:white}
-footer p{color:#b9cbc2;font-size:12px;line-height:1.8;max-width:350px}
-footer h4{font-size:13px}
-.footer-links{display:grid;gap:12px;color:#b9cbc2;font-size:12px}
-.copyright{border-top:1px solid #ffffff25;padding-top:18px;color:#9fb6aa;font-size:11px;text-align:center}
-@media(max-width:800px){
- .links{display:none}
- .hero-inner{grid-template-columns:1fr;padding:55px 22px}
- .hero-art{min-height:190px}
- .art-card{max-width:280px;padding:15px}
- .art-symbol{font-size:65px}
- .categories{grid-template-columns:repeat(3,1fr)}
- .products{grid-template-columns:repeat(2,1fr)}
- .seller{padding:25px}
-}
-@media(max-width:480px){
- .nav{padding:12px}
- .logo-name{font-size:21px}
- .nav-actions .btn-light{display:none}
- .hero h1{font-size:40px}
- .section{padding:45px 15px}
- .section-head{align-items:start;flex-direction:column}
- .section h2{font-size:25px}
- .categories{gap:9px}
- .category{padding:15px 5px}
- .cat-icon{width:44px;height:44px;font-size:21px}
- .products{gap:10px}
- .product-visual{height:125px;font-size:48px}
- .product-info{padding:11px}
- .product-info h3{font-size:12px}
- .price{font-size:11px}
- .add-btn{font-size:10px;padding:7px}
- .seller{grid-template-columns:1fr}
- .seller-mark{display:none}
- .benefits{grid-template-columns:1fr}
- .footer-top{grid-template-columns:1fr 1fr}
- .footer-top>div:first-child{grid-column:1/-1}
-}
+
+:root{--g:#073f32;--g2:#0b654e;--gold:#d9ad55;--cream:#f7f7f2;--ink:#17231f;--muted:#68756e;--line:#e6eae4;--white:#fff;--red:#b63b32;--shadow:0 18px 50px rgba(7,63,50,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.wrap{max-width:1180px;margin:auto;padding:0 24px}
+.top{background:#052f27;color:#e8eee9;font-size:12px;text-align:center;padding:9px 12px;letter-spacing:.25px}.header{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}.logo{font-weight:950;font-size:29px;letter-spacing:1.3px;color:var(--g);text-decoration:none}.logo span{color:var(--gold)}.navlinks{display:flex;gap:23px;align-items:center}.navlinks a{color:#34433b;text-decoration:none;font-size:14px;font-weight:650}.navlinks a:hover{color:var(--g2)}.btn{background:var(--g);color:#fff;border-radius:11px;padding:13px 18px;font-weight:750;box-shadow:0 5px 14px rgba(7,63,50,.12);transition:.2s}.btn:hover{background:var(--g2);transform:translateY(-1px)}.btn.gold{background:var(--gold);color:#20271f;box-shadow:none}.btn.light{background:#edf3ef;color:var(--g);box-shadow:none}.btn.danger{background:#fff0ee;color:var(--red);box-shadow:none}.btn.small{padding:9px 12px;font-size:13px}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 78% 15%,rgba(217,173,85,.22),transparent 25%),linear-gradient(120deg,#052f27 0%,#073f32 56%,#0b654e 100%);color:#fff;padding:72px 0 66px}.hero:after{content:"";position:absolute;width:480px;height:480px;border:1px solid #ffffff16;border-radius:50%;right:-130px;bottom:-300px;box-shadow:0 0 0 45px #ffffff08,0 0 0 90px #ffffff05}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:center;position:relative;z-index:1}.eyebrow{color:#bd9140;font-size:11px;font-weight:850;letter-spacing:2px;text-transform:uppercase}.hero .eyebrow{color:#e8c477}.hero h1{font-size:clamp(38px,5vw,62px);line-height:1.04;letter-spacing:-1.8px;margin:17px 0}.hero p{color:#d7e5dd;max-width:560px;line-height:1.75;font-size:16px}.heroActions{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin-top:26px}.heroActions .btn{padding:15px 20px}.heroNote{font-size:12px;color:#d1dfd7;margin-top:17px}.heroVisual{position:relative;min-height:360px}.heroPhoto{position:absolute;inset:8px 22px 8px 38px;border-radius:26px;background:linear-gradient(180deg,#0000,#0005),url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=85') center/cover;box-shadow:0 25px 65px #001b1580;border:1px solid #ffffff35}.floatCard{position:absolute;background:#fff;color:var(--ink);padding:15px 17px;border-radius:15px;box-shadow:var(--shadow)}.floatCard strong{display:block;color:var(--g);font-size:17px}.floatCard small{color:var(--muted)}.floatOne{left:0;bottom:34px}.floatTwo{right:0;top:30px}.floatIcon{display:inline-grid;place-items:center;background:#f5ecd9;color:#7a5b20;border-radius:10px;width:34px;height:34px;margin-right:8px}
+.trust{background:#fff;border-bottom:1px solid var(--line)}.trustGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:21px 0}.trustItem{display:flex;align-items:center;justify-content:center;gap:10px;color:#405047;font-size:13px;font-weight:700}.trustIcon{width:34px;height:34px;display:grid;place-items:center;background:#edf3ef;border-radius:50%;color:var(--g);font-size:16px}
+.section{padding:54px 0}.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:24px}.section h2{margin:7px 0 0;font-size:clamp(23px,3vw,30px);letter-spacing:-.6px}.muted{color:var(--muted)}.cats{display:flex;gap:10px;overflow:auto;padding:2px 0 10px}.chip{white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:30px;padding:11px 17px;color:#435148;font-weight:650}.chip.active,.chip:hover{background:var(--g);color:#fff;border-color:var(--g)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.product{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden;transition:.22s;box-shadow:0 4px 18px rgba(15,40,29,.035)}.product:hover{transform:translateY(-4px);box-shadow:var(--shadow)}.product img{width:100%;height:190px;object-fit:cover;background:#edf0eb}.placeholder{height:190px;display:grid;place-items:center;background:linear-gradient(135deg,#e8eee8,#f7f4eb);font-size:44px}.pbody{padding:16px}.pbody h3{font-size:16px;margin:0 0 9px;line-height:1.35}.price{font-weight:900;color:var(--g);font-size:19px}.shopname{font-size:12px;color:var(--muted);margin:8px 0 14px}.pactions{display:flex;gap:8px}.pactions .btn{flex:1}.panel{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px;margin:18px 0;box-shadow:0 5px 22px rgba(20,50,35,.035)}.panel h2,.panel h3{margin-top:0}.hidden{display:none!important}.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}.field label{font-size:13px;font-weight:750;color:#34443b}.field input,.field textarea,.field select{width:100%;border:1px solid #dce3dc;border-radius:10px;padding:13px;background:#fff;outline:none}.field input:focus,.field textarea:focus{border-color:var(--g2);box-shadow:0 0 0 3px #0b654e15}.field textarea{min-height:82px;resize:vertical}.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1;min-width:180px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.status{padding:5px 9px;border-radius:20px;background:#edf3ef;color:var(--g);font-size:12px}.notice{padding:13px 15px;border-radius:11px;background:#fff8e8;color:#6b501b;margin:12px 0;font-size:13px}.success{background:#eaf6ed;color:#205b31}.error{background:#fff0ee;color:#8c2e28}.listrow{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;align-items:center}.listrow:last-child{border:0}.sellerBand{background:linear-gradient(110deg,#f0f4ed,#f8f1df);border:1px solid #e7e7d9;border-radius:22px;padding:34px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.sellerBand h2{max-width:520px}.sellerBand p{max-width:540px;line-height:1.65}.sellerMark{font-size:52px;color:#b48a3f}.footer{background:#052f27;color:#dce8e1;padding:42px 0 28px;margin-top:35px}.footer .logo{color:#fff}.footerCols{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer small{color:#aebfb5}.modalback{position:fixed;inset:0;background:#061c17b8;backdrop-filter:blur(4px);z-index:20;display:grid;place-items:center;padding:15px}.modal{background:#fff;border-radius:19px;padding:24px;width:min(460px,100%);max-height:90vh;overflow:auto;box-shadow:0 24px 80px #001b1540}.modalHead{display:flex;justify-content:space-between;align-items:center}.close{background:#eef1ed;border-radius:50%;width:35px;height:35px;font-size:20px}.cartline{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.empty{text-align:center;padding:38px 18px;color:var(--muted);background:#fff;border:1px dashed #d9e1d9;border-radius:15px;grid-column:1/-1}.mobileMenu{display:none}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.heroGrid{grid-template-columns:1fr .8fr;gap:18px}.heroVisual{min-height:290px}.heroPhoto{inset:12px 10px 12px 10px}.floatTwo{right:-4px}.navlinks{gap:10px}.navlinks a{display:none}}
+@media(max-width:600px){.wrap{padding:0 16px}.nav{height:66px}.logo{font-size:25px}.hero{padding:48px 0 43px}.heroGrid{grid-template-columns:1fr}.hero h1{font-size:42px}.hero p{font-size:14px}.heroVisual{min-height:245px;margin-top:5px}.heroPhoto{inset:8px 24px 8px 24px;border-radius:20px}.floatCard{padding:11px 13px}.floatOne{left:0;bottom:16px}.floatTwo{right:0;top:12px}.trustGrid{grid-template-columns:1fr;gap:11px;padding:16px 0}.trustItem{justify-content:flex-start}.section{padding:36px 0}.sectionHead{align-items:flex-start}.section h2{font-size:23px}.grid{gap:11px}.product img,.placeholder{height:140px}.pbody{padding:11px}.pbody h3{font-size:14px}.price{font-size:16px}.pactions{flex-direction:column}.sellerBand{padding:24px}.sellerMark{display:none}.footer{padding:32px 0}}
+
+
+#shopsGrid .product{min-height:245px}#shopsGrid .placeholder{overflow:hidden;color:#9a7b3e}
+#shopsGrid .pbody{display:flex;flex-direction:column;align-items:flex-start}#shopsGrid .pbody .btn{margin-top:auto}
+@media(max-width:600px){.navlinks a{display:none}#shopsGrid{grid-template-columns:repeat(2,minmax(0,1fr))}#shopsGrid .product{min-height:225px}}
+
 </style>
 </head>
 <body>
-<div class="topbar">Bienvenue sur VENDAI — Le commerce sans frontières</div>
-<header>
-<nav class="nav">
-<a href="#accueil" class="logo">
-<span class="logo-mark">V</span>
-<span><span class="logo-name">VENDAI</span><br><span class="logo-sub">LE COMMERCE SANS FRONTIÈRES</span></span>
-</a>
-<div class="links">
-<a href="#accueil">Accueil</a>
-<a href="#categories">Catégories</a>
-<a href="#produits">Produits</a>
-<a href="#vendeur">Devenir vendeur</a>
-</div>
-<div class="nav-actions">
-<a class="btn btn-light" href="#produits">Explorer</a>
-<a class="btn btn-dark" href="#vendeur">Vendre</a>
-</div>
-</nav>
-</header>
+<div class="top">VENDAI — Découvrez, achetez et développez le commerce local</div>
+<header class="header"><div class="wrap nav">
+  <a class="logo" href="#" style="text-decoration:none">VENDA<span>I</span></a>
+  <nav class="navlinks"><a href="#categories">Rayons</a><a href="#produits">Produits</a><a href="#boutiques">Boutiques</a><a href="#vendeurs">Vendre sur VENDAI</a><button class="btn light small" onclick="openCart()">Panier <span id="cartCount">0</span></button><button class="btn small" id="accountBtn" onclick="openAuth()">Se connecter</button></nav>
+</div></header>
 <main>
-<section class="hero" id="accueil">
-<div class="hero-inner">
-<div>
-<div class="eyebrow">BIENVENUE SUR VENDAI</div>
-<h1>Le commerce prend une nouvelle <span>dimension.</span></h1>
-<p>Découvrez des produits, explorez des boutiques et rapprochez-vous des commerçants. Tout le commerce en un seul endroit.</p>
-<div class="hero-buttons">
-<a class="btn btn-gold" href="#produits">Découvrir les produits →</a>
-<a class="btn btn-light" href="#vendeur">Créer ma boutique</a>
-</div>
-</div>
-<div class="hero-art">
-<div class="art-card">
-<div class="art-symbol">V</div>
-<h3>Bienvenue chez VENDAI</h3>
-<p>Découvrez. Comparez. Achetez.</p>
-</div>
-</div>
-</div>
+<section class="hero"><div class="wrap heroGrid">
+ <div><div class="eyebrow">La marketplace ivoirienne</div><h1>Les bonnes affaires<br>commencent ici.</h1><p>Explorez des produits proposés par des commerçants locaux. Découvrez de nouvelles boutiques et envoyez vos demandes de commande simplement, depuis votre téléphone.</p>
+ <div class="heroActions"><button class="btn gold" onclick="document.querySelector('#produits').scrollIntoView({behavior:'smooth'})">Découvrir les produits&nbsp; →</button><button class="btn" style="background:#ffffff18;border:1px solid #ffffff50;box-shadow:none" onclick="openAuth('merchant')">Ouvrir ma boutique</button></div><div class="heroNote">Une vitrine digitale pour les commerçants de Côte d’Ivoire.</div></div>
+ <div class="heroVisual"><div class="heroPhoto"></div><div class="floatCard floatOne"><span class="floatIcon">✦</span><strong>Des boutiques locales</strong><small>À découvrir sur VENDAI</small></div><div class="floatCard floatTwo"><strong>VENDAI</strong><small>Le commerce se rapproche</small></div></div>
+</div></section>
+<section class="trust"><div class="wrap trustGrid"><div class="trustItem"><span class="trustIcon">✓</span> Des commerçants locaux</div><div class="trustItem"><span class="trustIcon">⌕</span> Une recherche simple</div><div class="trustItem"><span class="trustIcon">▣</span> Commandes en FCFA</div></div></section>
+<section class="section"><div class="wrap"><div class="sectionHead"><div><div class="eyebrow">Explorer</div><h2>Nos catégories</h2></div></div><div class="cats" id="categories"></div></div></section>
+
+<section class="section" id="boutiques" style="padding-top:10px">
+ <div class="wrap">
+  <div class="sectionHead"><div><div class="eyebrow">Nos commerçants</div><h2>Découvrez les boutiques</h2><div class="muted">Explorez les vendeurs présents sur VENDAI.</div></div></div>
+  <div class="grid" id="shopsGrid"><div class="empty">Chargement des boutiques…</div></div>
+ </div>
 </section>
-<div class="search-wrap">
-<div class="search-box">
-<input id="search" type="search" placeholder="Que recherchez-vous aujourd'hui ?">
-<button onclick="filterProducts()">Rechercher</button>
-</div>
-</div>
-<section class="section" id="categories">
-<div class="section-head">
-<div><div class="kicker">EXPLOREZ</div><h2>Nos catégories</h2></div>
-<p>Trouvez facilement ce que vous cherchez.</p>
-</div>
-<div class="categories">
-<div class="category" onclick="chooseCategory('Mode')"><div class="cat-icon">👕</div><strong>Mode</strong></div>
-<div class="category" onclick="chooseCategory('Téléphones')"><div class="cat-icon">📱</div><strong>Téléphones</strong></div>
-<div class="category" onclick="chooseCategory('Maison')"><div class="cat-icon">🏠</div><strong>Maison</strong></div>
-<div class="category" onclick="chooseCategory('Beauté')"><div class="cat-icon">✨</div><strong>Beauté</strong></div>
-<div class="category" onclick="chooseCategory('Accessoires')"><div class="cat-icon">⌚</div><strong>Accessoires</strong></div>
-<div class="category" onclick="chooseCategory('Autres')"><div class="cat-icon">🛍️</div><strong>Autres</strong></div>
-</div>
+<section class="section" style="padding-top:0">
+ <div class="wrap">
+  <div class="sellerBand" style="background:linear-gradient(110deg,#073f32,#0b654e);color:white;border:0">
+   <div><div class="eyebrow" style="color:#e8c477">Le commerce ivoirien avance</div><h2 style="color:white">Une vitrine digitale pour faire grandir votre activité.</h2><p style="color:#d7e5dd">Créez votre boutique, présentez vos produits et recevez des demandes de commande. VENDAI vous aide à être visible auprès de nouveaux clients.</p><button class="btn gold" onclick="openAuth('merchant')">Rejoindre VENDAI →</button></div><div class="sellerMark" style="color:#e8c477">✦</div>
+  </div>
+ </div>
 </section>
-<section class="products-section" id="produits">
-<div class="section">
-<div class="section-head">
-<div><div class="kicker">SÉLECTION VENDAI</div><h2>Découvrez nos produits</h2></div>
-<p>Exemples de présentation</p>
-</div>
-<div class="products" id="product-list">
-<article class="product" data-category="Mode"><div class="product-visual v1"><span class="product-label">EXEMPLE</span>👟</div><div class="product-info"><small>Mode</small><h3>Chaussures tendance</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Téléphones"><div class="product-visual v2"><span class="product-label">EXEMPLE</span>📱</div><div class="product-info"><small>Téléphones</small><h3>Téléphone mobile</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Accessoires"><div class="product-visual v3"><span class="product-label">EXEMPLE</span>⌚</div><div class="product-info"><small>Accessoires</small><h3>Montre élégante</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Maison"><div class="product-visual v4"><span class="product-label">EXEMPLE</span>🪑</div><div class="product-info"><small>Maison</small><h3>Décoration maison</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Beauté"><div class="product-visual v5"><span class="product-label">EXEMPLE</span>🧴</div><div class="product-info"><small>Beauté</small><h3>Soins et beauté</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Mode"><div class="product-visual v6"><span class="product-label">EXEMPLE</span>👔</div><div class="product-info"><small>Mode</small><h3>Collection vêtements</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Autres"><div class="product-visual v7"><span class="product-label">EXEMPLE</span>🎧</div><div class="product-info"><small>Autres</small><h3>Équipement audio</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-<article class="product" data-category="Accessoires"><div class="product-visual v8"><span class="product-label">EXEMPLE</span>👜</div><div class="product-info"><small>Accessoires</small><h3>Sac du quotidien</h3><div class="product-bottom"><span class="price">Prix à venir</span><button class="add-btn">Découvrir</button></div></div></article>
-</div>
-</div>
-</section>
-<section class="section" id="vendeur">
-<div class="seller">
-<div>
-<div class="kicker">ESPACE COMMERÇANTS</div>
-<h2>Votre boutique mérite d'être vue.</h2>
-<p>Rejoignez VENDAI et préparez votre présence en ligne. Présentez vos produits et faites découvrir votre activité à de nouveaux clients.</p>
-<a href="mailto:" class="btn btn-dark">Devenir vendeur →</a>
-</div>
-<div class="seller-mark">✦</div>
-</div>
-<div class="benefits">
-<div class="benefit"><div class="benefit-icon">🏪</div><h3>Votre propre boutique</h3><p>Présentez votre commerce avec une identité qui vous ressemble.</p></div>
-<div class="benefit"><div class="benefit-icon">📦</div><h3>Vos produits en ligne</h3><p>Préparez un catalogue clair pour vos futurs clients.</p></div>
-<div class="benefit"><div class="benefit-icon">🤝</div><h3>Plus de visibilité</h3><p>Faites connaître votre activité sur une plateforme commune.</p></div>
-</div>
-</section>
+
+<section class="section" id="produits" style="padding-top:5px"><div class="wrap">
+ <div class="sectionHead"><div><div class="eyebrow">Sélection VENDAI</div><h2>Produits disponibles</h2><div class="muted" id="productCount">Chargement…</div></div><button class="btn light small" onclick="loadProducts()">Actualiser</button></div>
+ <div class="grid" id="products"><div class="empty">Chargement des produits…</div></div>
+</div></section>
+<section class="section" id="vendeurs"><div class="wrap"><div class="sellerBand"><div><div class="eyebrow">Espace commerçant</div><h2>Votre boutique mérite d’être vue.</h2><p class="muted">Présentez vos produits, gérez votre catalogue et recevez les demandes de commande depuis un espace dédié. Rejoignez la vitrine VENDAI.</p><button class="btn" onclick="openAuth('merchant')">Créer ma boutique&nbsp; →</button></div><div class="sellerMark">✦</div></div></div></section>
+<section class="section hidden" id="dashboard"><div class="wrap"><div class="sectionHead"><div><div class="eyebrow">Mon espace</div><h2 id="dashTitle">Mon compte</h2><div class="muted" id="userEmail"></div></div><button class="btn danger small" onclick="signOut()">Déconnexion</button></div>
+ <div class="tabs"><button class="btn light small" onclick="showTab('shopTab')">Ma boutique</button><button class="btn light small" onclick="showTab('productTab')">Mes produits</button><button class="btn light small" onclick="showTab('ordersTab')">Commandes</button><button class="btn light small" onclick="showTab('profileTab')">Mon profil</button></div>
+ <div id="shopTab" class="panel"><h3>Ma boutique</h3><div id="shopInfo"></div><form id="shopForm"><div class="field"><label>Nom de la boutique</label><input name="name" required maxlength="80"></div><div class="field"><label>Description</label><textarea name="description" maxlength="500"></textarea></div><div class="field"><label>Téléphone professionnel (facultatif)</label><input name="phone" inputmode="tel"></div><button class="btn">Enregistrer ma boutique</button></form></div>
+ <div id="productTab" class="panel hidden"><h3>Ajouter un produit</h3><form id="productForm"><div class="field"><label>Nom du produit</label><input name="title" required maxlength="100"></div><div class="row"><div class="field"><label>Prix (FCFA)</label><input name="price" type="number" min="0" step="1" required></div><div class="field"><label>Stock</label><input name="stock" type="number" min="0" step="1" value="1" required></div></div><div class="row"><div class="field"><label>Catégorie</label><input name="category" placeholder="Ex. Mode, beauté, maison"></div><div class="field"><label>URL de l’image (facultatif)</label><input name="image_url" type="url" placeholder="https://…"></div></div><div class="field"><label>Description</label><textarea name="description"></textarea></div><button class="btn">Publier le produit</button></form><h3 style="margin-top:25px">Produits de ma boutique</h3><div id="myProducts"></div></div>
+ <div id="ordersTab" class="panel hidden"><h3>Commandes reçues / passées</h3><div id="myOrders">Chargement…</div></div>
+ <div id="profileTab" class="panel hidden"><h3>Mon compte</h3><p class="muted">Connecté avec <span id="profileEmail"></span></p><p class="muted">Les commandes de cette version sont enregistrées comme demandes en attente. Aucun paiement en ligne n’est activé.</p></div>
+</div></section>
 </main>
-<footer>
-<div class="footer-inner">
-<div class="footer-top">
-<div>
-<div class="logo"><span class="logo-mark">V</span><span><span class="logo-name">VENDAI</span><br><span class="logo-sub">LE COMMERCE SANS FRONTIÈRES</span></span></div>
-<p>Une marketplace qui rapproche les commerçants et les clients, en Côte d'Ivoire et au-delà.</p>
-</div>
-<div><h4>Découvrir</h4><div class="footer-links"><a href="#accueil">Accueil</a><a href="#categories">Catégories</a><a href="#produits">Produits</a></div></div>
-<div><h4>Commerçants</h4><div class="footer-links"><a href="#vendeur">Devenir vendeur</a><a href="#vendeur">En savoir plus</a></div></div>
-</div>
-<div class="copyright">© 2026 VENDAI. Tous droits réservés.</div>
-</div>
-</footer>
+<footer class="footer"><div class="wrap"><div class="logo">VENDA<span>I</span></div><p>La marketplace qui rapproche les commerçants et les clients.</p><small>© 2026 VENDAI — Côte d’Ivoire</small></div></footer>
+<div id="modalRoot"></div>
 <script>
-function filterProducts(){
- const q=document.getElementById('search').value.toLowerCase().trim();
- let count=0;
- document.querySelectorAll('.product').forEach(function(p){
-  const match=p.innerText.toLowerCase().includes(q);
-  p.style.display=match?'':'none';
-  if(match)count++;
- });
- let empty=document.getElementById('empty-result');
- if(!count){
-  if(!empty){
-   empty=document.createElement('div');
-   empty.id='empty-result';
-   empty.className='empty';
-   empty.textContent='Aucun produit trouvé. Essayez une autre recherche.';
-   document.getElementById('product-list').appendChild(empty);
-  }
- }else if(empty){empty.remove();}
+const SUPABASE_URL='https://djzwbcmhwujvbgagbxes.supabase.co';
+const SUPABASE_KEY='sb_publishable_xsPXSQEuHn8Zs1b08iujow_rCIUKIi_';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null, myShop=null, products=[], cart=[], activeCategory='Tout';
+const $=s=>document.querySelector(s);
+const money=n=>new Intl.NumberFormat('fr-FR').format(Number(n)||0)+' FCFA';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function msg(target,text,type='notice'){const el=typeof target==='string'?$(target):target;if(el)el.innerHTML=`<div class="notice ${type}">${esc(text)}</div>`}
+function openAuth(mode='login'){ $('#modalRoot').innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h2>${mode==='merchant'?'Créer mon compte vendeur':'Bienvenue sur VENDAI'}</h2><button class="close" onclick="closeModal()">×</button></div><div class="tabs"><button class="btn light small" onclick="authMode('login')">Connexion</button><button class="btn light small" onclick="authMode('signup')">Inscription</button></div><div id="authFormArea"></div></div></div>`;authMode(mode==='merchant'?'signup':mode)}
+function closeModal(){$('#modalRoot').innerHTML=''}
+function authMode(mode){$('#authFormArea').innerHTML=`<form id="authForm"><div class="field"><label>Adresse e-mail</label><input name="email" type="email" autocomplete="email" required></div><div class="field"><label>Mot de passe</label><input name="password" type="password" minlength="6" autocomplete="${mode==='login'?'current-password':'new-password'}" required></div>${mode==='signup'?`<div class="field"><label>Nom complet</label><input name="full_name" required maxlength="100"></div><div class="field"><label>Téléphone (facultatif)</label><input name="phone" inputmode="tel"></div>`:''}<button class="btn" style="width:100%">${mode==='login'?'Se connecter':'Créer mon compte'}</button><div id="authMessage"></div></form>`;$('#authForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),email=f.get('email').trim(),password=f.get('password');let r;if(mode==='login'){r=await db.auth.signInWithPassword({email,password})}else{r=await db.auth.signUp({email,password,options:{data:{full_name:f.get('full_name'),phone:f.get('phone')}}})}if(r.error){msg('#authMessage',r.error.message,'error');return}if(mode==='signup'&&!r.data.session){msg('#authMessage','Compte créé. Vérifie ton e-mail pour confirmer ton inscription avant de te connecter.','success');return}closeModal();await refreshAuth()}}
+async function signOut(){await db.auth.signOut();cart=[];await refreshAuth()}
+async function refreshAuth(){const {data}=await db.auth.getUser();currentUser=data.user||null;$('#accountBtn').textContent=currentUser?'Mon espace':'Se connecter';$('#dashboard').classList.toggle('hidden',!currentUser);if(currentUser){$('#userEmail').textContent=currentUser.email;$('#profileEmail').textContent=currentUser.email;await loadShop();await loadMyProducts();await loadOrders()}else{myShop=null} }
+function showTab(id){['shopTab','productTab','ordersTab','profileTab'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id))}
+async function loadShop(){const {data,error}=await db.from('merchants').select('*').eq('owner_id',currentUser.id).limit(1).maybeSingle();if(error){msg('#shopInfo','Impossible de charger la boutique : '+error.message,'error');return}myShop=data;$('#dashTitle').textContent=myShop?myShop.name:'Mon espace vendeur';$('#shopInfo').innerHTML=myShop?`<p><strong>${esc(myShop.name)}</strong></p><p class="muted">${esc(myShop.description||'Aucune description')}</p>`:'<p class="muted">Vous n’avez pas encore créé de boutique. Remplissez le formulaire ci-dessous.</p>';const f=$('#shopForm');f.name.value=myShop?.name||'';f.description.value=myShop?.description||'';f.phone.value=myShop?.phone||'';f.onsubmit=async e=>{e.preventDefault();const v={name:f.name.value.trim(),description:f.description.value.trim(),phone:f.phone.value.trim(),owner_id:currentUser.id};let r=myShop?await db.from('merchants').update(v).eq('id',myShop.id).select().single():await db.from('merchants').insert(v).select().single();if(r.error){msg('#shopInfo','Erreur : '+r.error.message,'error');return}myShop=r.data;msg('#shopInfo','Boutique enregistrée avec succès.','success');await loadShop();await loadProducts();await loadShops()}}
+
+async function loadShops(){
+ const {data,error}=await db.from('merchants').select('id,name,description,logo_url').order('created_at',{ascending:false}).limit(12);
+ const root=$('#shopsGrid');
+ if(error){root.innerHTML='<div class="empty">Les boutiques ne sont pas disponibles pour le moment.</div>';return}
+ const rows=data||[];
+ root.innerHTML=rows.length?rows.map(s=>`<article class="product"><div class="placeholder" style="height:125px">${s.logo_url?`<img src="${esc(s.logo_url)}" alt="${esc(s.name||'Boutique')}" style="width:100%;height:125px;object-fit:cover">`:'🏬'}</div><div class="pbody"><h3>${esc(s.name||'Boutique VENDAI')}</h3><div class="shopname">${esc(s.description||'Découvrez les produits de cette boutique.')}</div><button class="btn light small" onclick="showShopProducts(${Number(s.id)})">Voir les produits</button></div></article>`).join(''):'<div class="empty">Les premières boutiques arrivent bientôt. Vous pouvez être parmi les premiers commerçants !</div>';
 }
-function chooseCategory(category){
- document.getElementById('search').value=category;
- filterProducts();
- document.getElementById('produits').scrollIntoView({behavior:'smooth'});
+async function showShopProducts(shopId){
+ activeCategory='Tout';
+ const {data,error}=await db.from('products').select('id,merchant_id,title,description,price,image_url,category,stock,is_active,created_at,merchants(name)').eq('merchant_id',shopId).eq('is_active',true).order('created_at',{ascending:false});
+ if(error){alert('Impossible de charger cette boutique.');return}
+ products=data||[];renderProducts();buildCategories();
+ document.querySelector('#produits').scrollIntoView({behavior:'smooth'});
+ $('#productCount').textContent=products.length+' produit(s) dans cette boutique';
 }
-document.getElementById('search').addEventListener('keydown',function(e){
- if(e.key==='Enter')filterProducts();
-});
+
+async function loadProducts(){const {data,error}=await db.from('products').select('id,merchant_id,title,description,price,image_url,category,stock,is_active,created_at,merchants(name)').eq('is_active',true).order('created_at',{ascending:false}).limit(100);if(error){$('#products').innerHTML='<div class="empty">Impossible de charger les produits pour le moment.</div>';return}products=data||[];renderProducts();buildCategories()}
+function buildCategories(){const cats=['Tout',...new Set(products.map(p=>p.category).filter(Boolean))];$('#categories').innerHTML=cats.map(c=>`<button class="chip ${activeCategory===c?'active':''}" onclick="activeCategory='${esc(c).replace(/'/g,"\\'")}';buildCategories();renderProducts()">${esc(c)}</button>`).join('')}
+function renderProducts(){const q=($('#search')?.value||'').toLowerCase().trim();const arr=products.filter(p=>(activeCategory==='Tout'||p.category===activeCategory)&&(!q||`${p.title} ${p.description||''} ${p.category||''} ${p.merchants?.name||''}`.toLowerCase().includes(q)));$('#productCount').textContent=arr.length+' produit(s)';$('#products').innerHTML=arr.length?arr.map(p=>`<article class="product">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy" onerror="this.outerHTML='<div class=&quot;placeholder&quot;>🛍️</div>'">`:'<div class="placeholder">🛍️</div>'}<div class="pbody"><h3>${esc(p.title)}</h3><div class="price">${money(p.price)}</div><div class="shopname">${esc(p.merchants?.name||'Boutique VENDAI')} · ${p.stock} disponible(s)</div><div class="pactions"><button class="btn small" onclick="addCart('${p.id}')">Ajouter</button><button class="btn light small" onclick="viewProduct('${p.id}')">Détails</button></div></div></article>`).join(''):'<div class="empty">Aucun produit ne correspond à votre recherche. Essayez une autre catégorie ou revenez bientôt.</div>'}
+function viewProduct(id){const p=products.find(x=>x.id===id);if(!p)return;$('#modalRoot').innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h2>${esc(p.title)}</h2><button class="close" onclick="closeModal()">×</button></div>${p.image_url?`<img src="${esc(p.image_url)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px">`:''}<h3 class="price">${money(p.price)}</h3><p>${esc(p.description||'Aucune description')}</p><p class="muted">Boutique : ${esc(p.merchants?.name||'VENDAI')} · Stock : ${p.stock}</p><button class="btn" onclick="addCart('${p.id}');closeModal()">Ajouter au panier</button></div></div>`}
+function addCart(id){const p=products.find(x=>x.id===id);if(!p)return;if(cart.length&&cart[0].merchant_id!==p.merchant_id){if(!confirm('Une commande ne peut contenir que des produits d’une seule boutique. Vider le panier actuel et ajouter ce produit ?'))return;cart=[]}const item=cart.find(x=>x.id===id);if(item){if(item.quantity>=p.stock){alert('Stock disponible insuffisant.');return}item.quantity++}else{if(p.stock<1){alert('Ce produit est indisponible.');return}cart.push({...p,quantity:1})}updateCart()}
+function updateCart(){$('#cartCount').textContent=cart.reduce((a,b)=>a+b.quantity,0)}
+function openCart(){const total=cart.reduce((s,p)=>s+Number(p.price)*p.quantity,0);$('#modalRoot').innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h2>Mon panier</h2><button class="close" onclick="closeModal()">×</button></div>${cart.length?cart.map(p=>`<div class="cartline"><div><strong>${esc(p.title)}</strong><div class="muted">${money(p.price)} × ${p.quantity}</div></div><div><strong>${money(p.price*p.quantity)}</strong><div><button class="btn light small" onclick="changeQty('${p.id}',-1)">−</button> <button class="btn light small" onclick="changeQty('${p.id}',1)">+</button></div></div></div>`).join('')+`<h3>Total : ${money(total)}</h3><div class="notice">Une commande contient les produits d’une seule boutique. Aucun paiement en ligne n’est activé.</div><div class="field"><label>Adresse ou indication de livraison (facultatif)</label><textarea id="deliveryAddress" placeholder="À préciser avec le commerçant"></textarea></div><button class="btn" style="width:100%" onclick="checkout()">Envoyer ma commande</button><div id="cartMessage"></div>`:'<div class="empty">Votre panier est vide.</div>'}</div></div>`}
+function changeQty(id,d){const p=cart.find(x=>x.id===id);if(!p)return;p.quantity+=d;if(p.quantity<=0)cart=cart.filter(x=>x.id!==id);else if(p.quantity>p.stock){p.quantity=p.stock;alert('Stock maximum atteint.')}updateCart();openCart()}
+async function checkout(){if(!currentUser){closeModal();openAuth();return}if(!cart.length)return;const merchantId=cart[0].merchant_id,total=cart.reduce((s,p)=>s+Number(p.price)*p.quantity,0);const order=await db.from('orders').insert({buyer_id:currentUser.id,merchant_id:merchantId,total_amount:total,delivery_address:$('#deliveryAddress').value.trim(),status:'pending'}).select().single();if(order.error){msg('#cartMessage','Commande non enregistrée : '+order.error.message,'error');return}const items=cart.map(p=>({order_id:order.data.id,product_id:p.id,quantity:p.quantity,unit_price:p.price}));const result=await db.from('order_items').insert(items);if(result.error){msg('#cartMessage','La commande a été créée mais ses articles n’ont pas tous été enregistrés. Contacte le commerçant avant toute remise de produit. Référence : '+order.data.id,'error');return}cart=[];updateCart();$('#modalRoot').innerHTML=`<div class="modalback"><div class="modal"><h2>Commande enregistrée !</h2><div class="notice success">Votre demande a été envoyée. Le commerçant pourra vous recontacter pour confirmer les détails.</div><p>Référence : ${esc(order.data.id)}</p><p>Total : <strong>${money(total)}</strong></p><button class="btn" onclick="closeModal();loadOrders()">Terminer</button></div></div>`;await loadOrders()}
+async function loadMyProducts(){if(!myShop){$('#myProducts').innerHTML='<p class="muted">Créez d’abord votre boutique.</p>';return}const {data,error}=await db.from('products').select('*').eq('merchant_id',myShop.id).order('created_at',{ascending:false});if(error){$('#myProducts').textContent='Erreur de chargement.';return}$('#myProducts').innerHTML=(data||[]).length?data.map(p=>`<div class="listrow"><div><strong>${esc(p.title)}</strong><div class="muted">${money(p.price)} · Stock : ${p.stock} · ${p.is_active?'Publié':'Masqué'}</div></div><div class="row" style="flex:0;min-width:0"><button class="btn light small" onclick="editProduct('${p.id}')">Modifier</button><button class="btn danger small" onclick="deleteProduct('${p.id}')">Supprimer</button></div></div>`).join(''):'<p class="muted">Votre catalogue est encore vide. Ajoutez votre premier produit pour commencer à présenter votre boutique.</p>'}
+$('#productForm').onsubmit=async e=>{e.preventDefault();if(!currentUser)return openAuth();if(!myShop){showTab('shopTab');msg('#shopInfo','Créez votre boutique avant de publier un produit.');return}const f=e.target,v={merchant_id:myShop.id,title:f.title.value.trim(),price:Number(f.price.value),stock:Number(f.stock.value),category:f.category.value.trim()||null,image_url:f.image_url.value.trim()||null,description:f.description.value.trim()||null,is_active:true};const {error}=await db.from('products').insert(v);if(error){alert('Impossible de publier : '+error.message);return}f.reset();f.stock.value=1;alert('Produit publié.');await loadMyProducts();await loadProducts()}
+async function editProduct(id){const {data:p,error}=await db.from('products').select('*').eq('id',id).single();if(error||!p)return alert('Produit introuvable.');$('#modalRoot').innerHTML=`<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><h2>Modifier le produit</h2><button class="close" onclick="closeModal()">×</button></div><form id="editForm"><div class="field"><label>Nom</label><input name="title" value="${esc(p.title)}" required></div><div class="row"><div class="field"><label>Prix (FCFA)</label><input name="price" type="number" min="0" value="${p.price}" required></div><div class="field"><label>Stock</label><input name="stock" type="number" min="0" value="${p.stock}" required></div></div><div class="field"><label>Catégorie</label><input name="category" value="${esc(p.category||'')}"></div><div class="field"><label>URL image</label><input name="image_url" type="url" value="${esc(p.image_url||'')}"></div><div class="field"><label>Description</label><textarea name="description">${esc(p.description||'')}</textarea></div><label><input type="checkbox" name="is_active" ${p.is_active?'checked':''}> Produit visible</label><p><button class="btn">Enregistrer</button></p></form></div></div>`;$('#editForm').onsubmit=async e=>{e.preventDefault();const f=e.target,{error}=await db.from('products').update({title:f.title.value.trim(),price:Number(f.price.value),stock:Number(f.stock.value),category:f.category.value.trim()||null,image_url:f.image_url.value.trim()||null,description:f.description.value.trim()||null,is_active:f.is_active.checked}).eq('id',id);if(error)return alert(error.message);closeModal();await loadMyProducts();await loadProducts()}}
+async function deleteProduct(id){if(!confirm('Supprimer ce produit ?'))return;const {error}=await db.from('products').delete().eq('id',id);if(error)return alert('Suppression impossible : '+error.message);await loadMyProducts();await loadProducts()}
+async function loadOrders(){if(!currentUser)return;const {data,error}=await db.from('orders').select('id,buyer_id,merchant_id,status,total_amount,delivery_address,created_at,merchants(name)').order('created_at',{ascending:false}).limit(50);if(error){$('#myOrders').textContent='Impossible de charger les commandes.';return}const rows=data||[];$('#myOrders').innerHTML=rows.length?rows.map(o=>`<div class="listrow"><div><strong>${o.buyer_id===currentUser.id?'Commande passée':'Commande reçue'} · ${esc(o.merchants?.name||'Boutique')}</strong><div class="muted">${new Date(o.created_at).toLocaleString('fr-FR')} · ${esc(o.status)}</div><small>${esc(o.id)}</small></div><strong>${money(o.total_amount)}</strong></div>`).join(''):'<p class="muted">Aucune commande pour le moment.</p>'}
+db.auth.onAuthStateChange(()=>{setTimeout(refreshAuth,0)});
+(async()=>{await refreshAuth();await loadProducts();await loadShops()})();
 </script>
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const VENDAI_SUPABASE_URL = 'https://djzwbcmhwujvbgagbxes.supabase.co';
-
-const VENDAI_SUPABASE_KEY = 'sb_publishable_xsPHSQEuHn8Zs1b08iujow_rCIUKIi_';
-
-const vendaiDB = window.supabase.createClient(
-  VENDAI_SUPABASE_URL,
-  VENDAI_SUPABASE_KEY
-);
-
-window.vendaiDB = vendaiDB;
-
-console.log('VENDAI : Supabase initialisé');
-</script>
-</body>
-</html>
+</body></html>
